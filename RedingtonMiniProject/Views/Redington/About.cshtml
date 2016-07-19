@@ -1,0 +1,34 @@
+﻿<h3>Overview</h3>
+<p>I started with basic ASP.NET Web Application template from Visual Studio 2015 Community with following options
+    <ul>
+        <li>No authentication</li>
+        <li>Disabled azure account</li>
+    </ul>
+    That provided me with base, that already include working routing, scripts and content areas
+</p>
+
+<p>I started with creating static MVC application that used form to call POST action, that performed required calculations. I used builtin jQuery validation to check if data within
+    ViewModel was in proper range &lt;0, 1&gt;. Then I've extracted calculating part to ProbabilityCalculatorTool helper - it might be usefull to extract it further to other project
+    that might be shared between more then one application. </p>
+
+<h3>Logging</h3>
+<p>Logging is made in single txt file in which date, time, input paramters and result are stored. In case method with invalid parameters is invoked (this should be prevented by jQuery
+    validation) it is also logged with special value "Exception: " which is followed by exception name. A special ProbabilityCalculatorOutOfRangeExpcetion was created to allow of
+    fast spotting of such occurences</p>
+
+<h3>Unit Testing</h3>
+<p>I've written Unit tests for ProbabilityCalcualtorTool and API controller. They check 2 positive and few negative (out of range) cases. I've avoided using moq at this time, by 
+    adding checks within logging method (it uses HttpContext), since adding moq for this type of object in such small project is very time consuming</p>
+
+<h3>Internationalization </h3>
+<p>There is resource file called Translations which allows for easy internationalization of entire application. Only english language is supported for now, but since it's customer
+    application translations are important (and also it removes 'magic string' occurences from code). As next step I would create pseudo-language to spot if there are any translations
+    missing (<a href="http://www.hanselman.com/blog/GlobalizationInternationalizationAndLocalizationInASPNETMVC3JavaScriptAndJQueryPart1.aspx">http://www.hanselman.com/blog/GlobalizationInternationalizationAndLocalizationInASPNETMVC3JavaScriptAndJQueryPart1.aspx</a>)</p>
+
+<h3>HTML / CSS style</h3>
+<p>A standard bootstrap css was used for this application. It looks good enough to show to the clients as first draw. I would have used materialize desing css as a next step. 
+    Standard Razor form styles were used for entire application to keep with standards and alow easier customization and replacement of styles later (no changes in any css file)</p>
+
+<h3>Scripting</h3>
+<p>A simple jQuery getJson call is used to handle user interactions. I would reccomend switching to AngularJs or other JavaScript front-end framework as rarely such applications
+    are finished with only one feature, and Angular is easier to split into modules and maintain</p>

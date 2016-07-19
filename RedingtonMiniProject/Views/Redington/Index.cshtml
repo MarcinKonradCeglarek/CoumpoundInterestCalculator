@@ -1,0 +1,114 @@
+﻿@using RedingtonMiniProject.Models
+@using RedingtonMiniProject.Resources
+@model RedingtonMiniProject.ViewModels.ProbabilityCalculatorViewModel
+
+
+
+<div id="FormWrapper">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.A, htmlAttributes: new {@class = "control-label col-sm-2"})
+                        <div class="col-sm-10">
+                            @Html.EditorFor(model => model.A, new {htmlAttributes = new {@class = "form-control"}})
+                            @Html.ValidationMessageFor(model => model.A, "", new {@class = "text-danger"})
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.B, htmlAttributes: new {@class = "control-label col-sm-2"})
+                        <div class="col-sm-10">
+                            @Html.EditorFor(model => model.B, new {htmlAttributes = new {@class = "form-control"}})
+                            @Html.ValidationMessageFor(model => model.B, "", new {@class = "text-danger"})
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Operation, htmlAttributes: new {@class = "control-label col-sm-2"})
+                        <div class="col-sm-10">
+                            @Html.EditorFor(model => model.Operation, new {htmlAttributes = new {@class = "form-control"}})
+                            @Html.ValidationMessageFor(model => model.Operation, "", new {@class = "text-danger"})
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <input type="submit" value="@Translations.Calculate" class="btn btn-primary form-control"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+            <div class="row">
+                <div class="col-md-offset-6 col-md-6 col-sm-12">
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">@Translations.Result</label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly="readonly" class="form-control" value="0" id="Result"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function() {
+            $("#FormWrapper > form").submit(function (event) {
+                event.preventDefault();
+
+                var combineWithLink = '@Url.Action("CombineWith", "Calculator", new { httproute = "ApiRoute" })';
+                var eitherLink = '@Url.Action("Either", "Calculator", new { httproute = "ApiRoute" })';
+                var operator = $("#@Html.NameFor(model => model.Operation)").val();
+                var link = '';
+
+                if (operator === '@Operation.CombineWith.ToString()') {
+                    link = combineWithLink;
+                } else if (operator === '@Operation.Either') {
+                    link = eitherLink;
+                }
+
+                var a = $("#@Html.NameFor(model => model.A)").val();
+                var b = $("#@Html.NameFor(model => model.B)").val();
+
+                // console.log(link);
+                // console.log("a: " + a);
+                // console.log("b: " + b);
+
+                $.getJSON(link, { 'a': a, 'b': b })
+                    .done(function (json) {
+                        // console.log("r: " + json);
+                        if (json === -1) {
+                            alert("@Translations.CalculateProbability_ControllerException");
+                        }
+
+                        $("#Result").val(json);
+                    }).fail(function(json) {
+                        alert("@Translations.CalculateProbability_JqonRequestFailed");
+                    });
+            });
+        });
+
+    </script>
+}
