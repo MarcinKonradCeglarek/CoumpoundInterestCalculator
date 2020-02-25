@@ -34,7 +34,7 @@
             var ctrl = new InterestController();
 
             // Act
-            var result = ctrl.CalculateInterest2(startDate, endDate, interest);
+            var result = ctrl.CalculateInterest1(startDate, endDate, interest);
 
             Assert.AreEqual(0.1025, result);
         }
@@ -49,7 +49,7 @@
             var ctrl = new InterestController();
 
             // Act
-            var result = ctrl.CalculateInterest3(startDate, endDate, interest);
+            var result = ctrl.CalculateInterest2(startDate, endDate, interest);
 
             Assert.AreEqual(0.1025, result);
         }

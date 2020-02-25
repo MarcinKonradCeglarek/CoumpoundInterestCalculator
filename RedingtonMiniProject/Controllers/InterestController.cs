@@ -8,30 +8,40 @@
 
     public class InterestController : ApiController
     {
-        const double daysInYear = 365;
+        private const double DaysInYear = 365;
 
         [HttpGet]
         public double CalculateInterest1(DateTime startDate, DateTime endDate, double yearlyInterestRate)
         {
-            var difference = endDate.Year - startDate.Year;
-            return yearlyInterestRate * difference;
+            var result = 1.0;
+            var quarterlyInterestRate = yearlyInterestRate / 4;
+            var monthsCount = (endDate.Month + endDate.Year * 12) - (startDate.Month + startDate.Year * 12);
+            for (int i = 0; i < monthsCount / 3; i++)
+            {
+                result = result * (1 + quarterlyInterestRate);
+            }
+
+            return result;
         }
 
         [HttpGet]
         public double CalculateInterest2(DateTime startDate, DateTime endDate, double yearlyInterestRate)
         {
-            var difference = new DateTime(endDate.Year, endDate.Month, endDate.Day) - new DateTime(startDate.Year, startDate.Month, startDate.Day);
-            return Math.Pow(1 + (yearlyInterestRate / daysInYear), difference.TotalDays) - 1;
-        }
+            var result = 1.0;
+            var quarterlyInterestRate = yearlyInterestRate / 4;
+            var monthsCount = (endDate.Month + endDate.Year * 12) - (startDate.Month + startDate.Year * 12);
 
-        [HttpGet]
-        public double CalculateInterest3(DateTime startDate, DateTime endDate, double yearlyInterestRate)
-        {
-            var difference = endDate - startDate;
-            var dailyInterest = 1 + (yearlyInterestRate / daysInYear);
-            double result = 1.0;
-            Enumerable.Range(0, (int)difference.TotalDays).ForEach(i => result = result * dailyInterest);
-            return result - 1;
+            if (endDate.Day <= startDate.Day)
+            {
+                monthsCount--;
+            }
+
+            for (int i = 0; i < monthsCount / 3; i++)
+            {
+                result = result * (1 + quarterlyInterestRate);
+            }
+
+            return result;
         }
     }
 }
