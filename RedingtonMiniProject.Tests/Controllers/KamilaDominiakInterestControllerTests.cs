@@ -9,10 +9,10 @@
     [TestFixture]
     public class KamilaDominiakInterestControllerTests
     {
-        private const double epsilon = 0.01;
+        private const double epsilon = 0.0001;
 
         [TestCase("2018/01/01", "2019/01/01", 0.05, 1.05, TestName = "Test1_Method1")]
-        [TestCase("2018/01/01", "2028/01/01", 0.05, 1.71, TestName = "Test2_Method1")]
+        [TestCase("2018/01/01", "2028/01/01", 0.05, 1.643619463, TestName = "Test2_Method1")]
         [TestCase("2020/02/02", "2031/02/02", 0.05, 1.71, TestName = "Test3_Method1")]
         [TestCase("2020/02/02", "2020/05/02", 0.09, 1.023, TestName = "Test4_Method1")]
         public void TestsForMethod1(string startDate, string endDate, double interest, double expectedResult)

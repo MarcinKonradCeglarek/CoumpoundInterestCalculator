@@ -1,10 +1,7 @@
 ﻿namespace RedingtonMiniProject.Controllers
 {
     using System;
-    using System.Linq;
     using System.Web.Http;
-
-    using WebGrease.Css.Extensions;
 
     public class InterestController : ApiController
     {
